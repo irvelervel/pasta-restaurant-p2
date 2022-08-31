@@ -27,6 +27,20 @@ class ReservationForm extends Component {
   // significa che inserendo i caratteri nei campi di testo io vado a modificare il mio state
   // significa anche che il valore del campo di testo viene LETTO in ogni momento dallo state
 
+  // propertyName può essere name, phone, numberOfPeople ecc.
+
+  handleChange = (propertyName, propertyValue) => {
+    this.setState({
+      reservation: {
+        ...this.state.reservation,
+        [propertyName]: propertyValue,
+        // se io voglio creare una proprietà di un oggetto a partire da
+        // una variable, un parametro, un qualcosa che debba venire "valutato"
+        // devo dichiararla dentro l'oggetto tra parentesi quadre
+      },
+    })
+  }
+
   render() {
     return (
       <Container>
@@ -42,11 +56,18 @@ class ReservationForm extends Component {
                   value={this.state.reservation.name}
                   onChange={(e) => {
                     console.log(e.target.value)
-                    this.setState({
-                      reservation: {
-                        name: e.target.value,
-                      },
-                    })
+                    // this.setState({
+                    //   reservation: {
+                    //     // lo spread operator (...) crea una copia
+                    //     // di tutte le proprietà di reservation
+                    //     // questo mi serve a mantenere integra
+                    //     // la shape, la forma del mio state
+                    //     // in ogni momento
+                    //     ...this.state.reservation,
+                    //     name: e.target.value,
+                    //   },
+                    // })
+                    this.handleChange('name', e.target.value)
                   }}
                 />
               </Form.Group>
@@ -56,12 +77,23 @@ class ReservationForm extends Component {
                 <Form.Control
                   type="tel"
                   placeholder="Inserisci il tuo numero di telefono"
+                  value={this.state.reservation.phone}
+                  onChange={(e) => {
+                    // qua chiamo handleChange
+                    this.handleChange('phone', e.target.value)
+                  }}
                 />
               </Form.Group>
 
               <Form.Group>
                 <Form.Label>Numero di persone</Form.Label>
-                <Form.Control as="select">
+                <Form.Control
+                  as="select"
+                  value={this.state.reservation.numberOfPeople}
+                  onChange={(e) => {
+                    this.handleChange('numberOfPeople', e.target.value)
+                  }}
+                >
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -72,12 +104,31 @@ class ReservationForm extends Component {
               </Form.Group>
 
               <Form.Group>
-                <Form.Check type="checkbox" label="Fumatori?" />
+                <Form.Check
+                  type="checkbox"
+                  label="Fumatori?"
+                  checked={this.state.reservation.smoking}
+                  onChange={(e) => {
+                    // this.setState({
+                    //   reservation: {
+                    //     ...this.state.reservation, // copia di tutto
+                    //     smoking: e.target.checked,
+                    //   },
+                    // })
+                    this.handleChange('smoking', e.target.checked)
+                  }}
+                />
               </Form.Group>
 
               <Form.Group>
                 <Form.Label>Data e ora</Form.Label>
-                <Form.Control type="datetime-local" />
+                <Form.Control
+                  type="datetime-local"
+                  value={this.state.reservation.dateTime}
+                  onChange={(e) => {
+                    this.handleChange('dateTime', e.target.value)
+                  }}
+                />
               </Form.Group>
 
               <Form.Group>
@@ -87,6 +138,10 @@ class ReservationForm extends Component {
                   as="textarea"
                   rows={3}
                   placeholder="Allergie, intolleranze, bambini..."
+                  value={this.state.reservation.specialRequests}
+                  onChange={(e) => {
+                    this.handleChange('specialRequests', e.target.value)
+                  }}
                 />
               </Form.Group>
 
