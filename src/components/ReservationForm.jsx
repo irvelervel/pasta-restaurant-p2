@@ -41,13 +41,82 @@ class ReservationForm extends Component {
     })
   }
 
+  //  con ASYNC/AWAIT
+  //   handleSubmit = async (e) => {
+  //     e.preventDefault()
+  //     console.log('inviamo la prenotazione!')
+  //     try {
+  //   let response = await fetch(
+  //     'https://striveschool-api.herokuapp.com/api/reservation',
+  //     {
+  //       method: 'POST',
+  //       body: JSON.stringify(this.state.reservation),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     }
+  //   )
+  //       if (response.ok) {
+  //         // le API hanno tornato 200, siamo a posto :)
+  // alert('prenotazione completata!')
+  // this.setState({
+  //   reservation: {
+  //     name: '',
+  //     phone: '',
+  //     numberOfPeople: 1,
+  //     smoking: false,
+  //     dateTime: '',
+  //     specialRequests: '',
+  //   },
+  // })
+  //   } else {
+  //     alert('errore durante la prenotazione')
+  //   }
+  //     } catch (error) {
+  //       console.log('something went wrong', error)
+  //     }
+  //   }
+
+  // CON .THEN() e .CATCH()
+  handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log('inviamo la prenotazione!')
+    fetch('https://striveschool-api.herokuapp.com/api/reservation', {
+      method: 'POST',
+      body: JSON.stringify(this.state.reservation),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert('prenotazione completata!')
+          this.setState({
+            reservation: {
+              name: '',
+              phone: '',
+              numberOfPeople: 1,
+              smoking: false,
+              dateTime: '',
+              specialRequests: '',
+            },
+          })
+        } else {
+          alert('errore durante la prenotazione')
+        }
+      })
+      .catch((error) => {
+        console.log('something went wrong', error)
+      })
+  }
+
   render() {
     return (
       <Container>
         <Row className="justify-content-center">
           <Col xs={12} md={6}>
             <h2 className="text-center my-4">Prenota il tuo tavolo qui!</h2>
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Group>
                 <Form.Label>Il tuo nome</Form.Label>
                 <Form.Control
@@ -99,7 +168,7 @@ class ReservationForm extends Component {
                   <option>3</option>
                   <option>4</option>
                   <option>5</option>
-                  <option>6+</option>
+                  <option>6</option>
                 </Form.Control>
               </Form.Group>
 
@@ -146,7 +215,7 @@ class ReservationForm extends Component {
               </Form.Group>
 
               <Button variant="primary" type="submit">
-                Submit
+                Invia prenotazione
               </Button>
             </Form>
           </Col>
